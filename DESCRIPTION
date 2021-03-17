@@ -1,11 +1,9 @@
 Package: loopyR
 Type: Package
-Title: What the Package Does (Title Case)
-Version: 0.1.0
-Author: Who wrote it
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Title: R Client for Loopbio's Loopy Software
+Version: 0.0.1
+Authors@R: person("Dan C.", "Mann", email = "mannd@staff.vetmeduni.ac.at", role = c("aut", "cre")
+Description: Tools for interacting with Loopbio's Loopy software.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
