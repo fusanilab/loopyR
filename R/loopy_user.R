@@ -2,19 +2,17 @@
 #'
 #' Stores Loopy API key and URL in .Renviron, creates .Renviron if it doesn't exist.
 #' @param api_key string Users API key.
-#' @param loopy_url string Loopy URL.
+#' @param loopy_origin string Loopy URL origin (protocol, subdomain, domain name and port, where applicable); Paths, querys, and parameters are specified in other functions.
 #' @param renviron_path string Path where .Renviron is stored. Default is the user's home directory.
-#' @example
-#' set_loopy_user("u53r100pyAPIk3y", "http://aVPN-pathfor.somelab.university.ac.at:5000/")
 #' @return Creates (if necessary) and appends user's Loopy API key and URL to user's .Renviron file.
 
 set_loopy_user <- function(api_key,
-                           loopy_url,
+                           loopy_origin,
                            renviron_path = Sys.getenv("HOME")) {
 
   # Format api key and loopy url for storage in .Renviron file
   api_key <- paste0("LOOPY_API_KEY=", api_key)
-  loopy_url <- paste0("LOOPY_URL=", loopy_url)
+  loopy_origin <- paste0("LOOPY_ORIGIN=", loopy_origin)
 
   # Find where .Reviron is or will be stored
   renviron <- sprintf("%s\\.Renviron", renviron_path)
@@ -27,7 +25,7 @@ set_loopy_user <- function(api_key,
 
     # Write the two key=value pairs to the new .Renviron file
     cat(
-      c(api_key, loopy_url),
+      c(api_key, loopy_origin),
       file = renviron,
       sep = "\n",
       append = T
@@ -51,16 +49,16 @@ set_loopy_user <- function(api_key,
       tx <- c(tx, api_key)
     }
 
-    # Checks if LOOPY_URL already exists
-    if (any(grepl(pattern = "LOOPY_URL=.*", tx))) {
-      # Updates Loopy_URL if it already exists
+    # Checks if LOOPY_ORIGIN already exists
+    if (any(grepl(pattern = "LOOPY_ORIGIN=.*", tx))) {
+      # Updates LOOPY_ORIGIN if it already exists
       tx <- gsub(
-        pattern = "LOOPY_URL=.*",
-        replace = loopy_url,
+        pattern = "LOOPY_ORIGIN=.*",
+        replace = loopy_origin,
         x = tx
       )
     } else {
-      tx <- c(tx, loopy_url)
+      tx <- c(tx, loopy_origin)
     }
 
     # Writes all of the key-value pairs
@@ -68,7 +66,7 @@ set_loopy_user <- function(api_key,
   }
 
   message(
-    "API key and Loopy URL written to .Renviron.",
+    "API key and Loopy URL origin written to .Renviron.",
     "\n",
     "Please restart your R session to use the Loopy API key and URL."
   )
