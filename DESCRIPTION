@@ -2,8 +2,9 @@ Package: loopyR
 Type: Package
 Title: R Client for Loopbio's Loopy Software
 Version: 0.0.1
-Authors@R: person("Dan C.", "Mann", email = "mannd@staff.vetmeduni.ac.at", role = c("aut", "cre")
+Authors@R: person("Dan C.", "Mann", email = "mannd@staff.vetmeduni.ac.at", role = c("aut", "cre"))
 Description: Tools for interacting with Loopbio's Loopy software.
 License: What license is it under?
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 7.1.1

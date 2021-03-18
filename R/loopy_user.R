@@ -1,4 +1,5 @@
 #' Set Loopy user
+#'
 #' Stores Loopy API key and URL in .Renviron, creates .Renviron if it doesn't exist.
 #' @param api_key string Users API key.
 #' @param loopy_url string Loopy URL.
