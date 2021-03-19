@@ -4,12 +4,12 @@
 \alias{set_loopy_user}
 \title{Set Loopy user}
 \usage{
-set_loopy_user(api_key, loopy_url, renviron_path = Sys.getenv("HOME"))
+set_loopy_user(api_key, loopy_origin, renviron_path = Sys.getenv("HOME"))
 }
 \arguments{
 \item{api_key}{string Users API key.}
 
-\item{loopy_url}{string Loopy URL.}
+\item{loopy_origin}{string Loopy URL origin (protocol, subdomain, domain name and port, where applicable); Paths, querys, and parameters are specified in other functions.}
 
 \item{renviron_path}{string Path where .Renviron is stored. Default is the user's home directory.}
 }
