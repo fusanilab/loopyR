@@ -15,7 +15,7 @@ loopy_api <- function(url,
                       collection_id = NULL) {
 
   if (!as.character(verbose) %in% c("0", "1")) {
-    warning("verbose= must be either '0' or '1'; defaulting to '0' (only user's files)")
+    warning("verbose= must be either '0' or '1'; \n Defaulting to '0' (only user's files)")
     verbose <- "0"
   }
 
@@ -72,7 +72,6 @@ loopy_api <- function(url,
   } else {
     stop("API did not return json or html", call. = FALSE)
   }
-
 
   if (httr::http_error(response)) {
     stop(
