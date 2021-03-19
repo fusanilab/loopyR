@@ -17,9 +17,6 @@ loopy_api <- function(url,
   if (!as.character(verbose) %in% c("0", "1")) {
     warning("verbose= must be either '0' or '1'; defaulting to '0' (only user's files)")
     verbose <- "0"
-  } else {
-    # convert to character just to be safe
-    verbose <- as.character(verbose)
   }
 
   # Creates a list and then filters out those that are set to NULL.
