@@ -2,11 +2,11 @@
 #'
 #' @description Wrapper for httr::GET that handles Loopy API requests.
 #' @param url string Loopy URL file path (origin should be set with set_loopy_user)
-#' @param verbose string
-#' @param video_id
-#' @param collection_id
+#' @param verbose string A URL parameter which permits user access to all the files they have permission to access ('1') or to their files ('0'); default is '0'.
+#' @param video_id string A URL parameter which limits return to only those with the video id.
+#' @param collection_id string A URL parameter which limits the return to only those from the specified collection.
 #'
-#' @return
+#' @return list A list including parse JSON (or HTML) data, the URL used in the API request, and the status code of the request.
 
 
 loopy_api <- function(url,
@@ -17,9 +17,6 @@ loopy_api <- function(url,
   if (!as.character(verbose) %in% c("0", "1")) {
     warning("verbose= must be either '0' or '1'; defaulting to '0' (only user's files)")
     verbose <- "0"
-  } else {
-    # convert to character just to be safe
-    verbose <- as.character(verbose)
   }
 
   # Creates a list and then filters out those that are set to NULL.
