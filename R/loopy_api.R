@@ -14,11 +14,14 @@ loopy_api <- function(url,
                       video_id = NULL,
                       collection_id = NULL) {
 
-  if (!as.character(verbose) %in% c("0", "1")) {
-    warning("verbose= must be either '0' or '1'; \n Defaulting to '0' (only user's files)")
-    verbose <- "0"
+  if(!is.null(verbose)){
+    if (!as.character(verbose) %in% c("0", "1")) {
+      warning(
+        "verbose= must be either '0','1', or NULL; \n Defaulting to '0' (only user's files)"
+      )
+      verbose <- "0"
+    }
   }
-
   # Creates a list and then filters out those that are set to NULL.
     # Some of the values in Loopy ids are "NULL" so there has to be a way to distinguish between those where the id=NULL and when the user doesn't know or care what the id is.
   params <- list(
