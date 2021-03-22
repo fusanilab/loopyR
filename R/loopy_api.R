@@ -13,8 +13,7 @@ loopy_api <- function(url,
                       verbose = "0",
                       video_id = NULL,
                       collection_id = NULL) {
-
-  if(!is.null(verbose)){
+  if (!is.null(verbose)) {
     if (!as.character(verbose) %in% c("0", "1")) {
       warning(
         "verbose= must be either '0','1', or NULL; \n Defaulting to '0' (only user's files)"
@@ -23,7 +22,7 @@ loopy_api <- function(url,
     }
   }
   # Creates a list and then filters out those that are set to NULL.
-    # Some of the values in Loopy ids are "NULL" so there has to be a way to distinguish between those where the id=NULL and when the user doesn't know or care what the id is.
+  # Some of the values in Loopy ids are "NULL" so there has to be a way to distinguish between those where the id=NULL and when the user doesn't know or care what the id is.
   params <- list(
     "video_id" = video_id,
     "collection_id" = collection_id,
@@ -34,7 +33,7 @@ loopy_api <- function(url,
   params[sapply(params, is.null)] <- NULL
 
   # Get the values defined with set_loopy_user
-  #? If a user wants to create a local .Renviron file will this still find it?
+  # ? If a user wants to create a local .Renviron file will this still find it?
   loopy_origin <- Sys.getenv("LOOPY_ORIGIN")
   api <- Sys.getenv("LOOPY_API_KEY")
 
@@ -59,7 +58,8 @@ loopy_api <- function(url,
   # Check for json or xml.
   # The xml check is probably not necessary.
   # Most of the relevant info is json format
-  if (httr::http_type(response) == "application/json") {
+  http_type <- httr::http_type(response)
+  if (http_type == "application/json") {
     parsed <-
       jsonlite::fromJSON(httr::content(
         response,
@@ -68,12 +68,17 @@ loopy_api <- function(url,
       ),
       simplifyVector = FALSE
       )
-  } else if (httr::http_type(response) == "text/html") {
+  } else if (http_type == "text/html") {
     parsed <-
       xml2::read_html(httr::content(response, "text"))
     message("API returned html, not json")
+  } else if (http_type == "application/x-hdf5") {
+    parsed <- httr::content(response)
+    message("LoopyR currently does not support returning the data in h5 format. \n Data has been returned in raw format.")
+  } else if (http_type == "text/csv") {
+    parsed <- httr::content(response)
   } else {
-    stop("API did not return json or html", call. = FALSE)
+    stop("API did not return json, html, or csv.", call. = FALSE)
   }
 
   if (httr::http_error(response)) {
