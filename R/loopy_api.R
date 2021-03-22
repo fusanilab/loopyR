@@ -12,7 +12,10 @@
 loopy_api <- function(url,
                       verbose = "0",
                       video_id = NULL,
-                      collection_id = NULL) {
+                      collection_id = NULL,
+                      group_key = NULL,
+                      asset_id = NULL,
+                      format = NULL) {
   if (!is.null(verbose)) {
     if (!as.character(verbose) %in% c("0", "1")) {
       warning(
@@ -26,7 +29,10 @@ loopy_api <- function(url,
   params <- list(
     "video_id" = video_id,
     "collection_id" = collection_id,
-    "verbose" = verbose
+    "verbose" = verbose,
+    "group_key" = group_key,
+    "asset_id" = asset_id,
+    "format" = format
   )
 
   # Removes NULLs so that values won't be included in the parameters
