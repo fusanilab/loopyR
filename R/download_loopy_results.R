@@ -14,14 +14,17 @@
 download_tracking_data <-
     function(asset_id, group_key) {
         # This function uses the main loopy_api function, but the call might be different enough to warrant a whole new function.
-        url <- sprintf("/api/1.0/result/download/asset/%s/", asset_id)
+        url <- sprintf("/api/1.0/result/download/asset/%s", asset_id)
 
         response <- loopy_api(
             url = url,
             asset_id = asset_id,
             group_key = group_key,
-            format = "csv"
+            format = "csv",
+            verbose = NULL
         )
+
+
 
         if(response$status_code == 202){
             # Need to add in a check and wait.
@@ -38,20 +41,22 @@ download_tracking_data <-
                     try <- try + 1
                 }
             }
+
+            if(try == 5){
+
+                warning("Request timed out: Try call again later")
+
+            } else {
+                # Make the call again
+                response <- loopy_api(
+                    url = url,
+                    asset_id = asset_id,
+                    group_key = group_key,
+                    format = "csv"
+                )
+            }
         }
 
-        if(try == 5){
-            warning("Request timed out: Try call again later")
-        }else{
-            # Make the call again
-            response <- loopy_api(
-                url = url,
-                asset_id = asset_id,
-                group_key = group_key,
-                format = "csv"
-            )
-
-        }
 
         return(response$content)
     }
@@ -76,14 +81,14 @@ check_job_status <-
 
         if(response$content$status == "finished"){
             message("Job is finished: Data has been prepared/cached")
-            out <- response$response
-        }else if(response$response == 202){
+            out <- response$status_code
+        }else if(response$status_code == 202){
             message("Data is being prepared")
-            out <- response$response
+            out <- response$status_code
         }else{
             ## I have to do more testing to see what the range of responses are.
             warning("Data preparation may have failed.")
-            out <- response$response
+            out <- response$status_code
         }
         return(out)
     }

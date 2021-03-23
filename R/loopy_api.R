@@ -90,12 +90,11 @@ loopy_api <- function(url,
   if (httr::http_error(response)) {
     stop(
       sprintf(
-        "Loopy API request failed [%s]\n%s\n<%s>",
+        "Loopy API request failed [%s]\n%s",
         httr::status_code(response),
-        parsed$message,
-        parsed$documentation_url
+        response$url
       ),
-      call. = FALSE
+      call. = TRUE
     )
   }
 
