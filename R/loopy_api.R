@@ -105,8 +105,8 @@ loopy_api <- function(url,
   structure(
     list(
       content = parsed,
-      path = response$url,
-      response = response$status_code
+      url = response$url,
+      status_code = response$status_code
     ),
     class = "loopy_api"
   )
@@ -114,8 +114,8 @@ loopy_api <- function(url,
 
 print.loopy_api <- function(x, ...) {
   # Defines print structure for loopy_api objects
-  cat("<Loopy ", x$path, ">\n", sep = "")
-  cat("Status code: ", x$response, "\n")
+  cat("<Loopy ", x$url, ">\n", sep = "")
+  cat("Status code: ", x$status_code, "\n")
   str(x$content)
   invisible(x)
 }
