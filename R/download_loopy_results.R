@@ -27,7 +27,7 @@ download_tracking_data <-
       # Makes a maximum of 5 attempts
       n_tries <- 5
       while (try < n_tries) {
-        job_status <- check_job_status(response$content$job_id)
+        job_status <- check_job_status(response$content$job_id, logging = TRUE)
         if (job_status == 200) {
           break
         } else {
@@ -62,16 +62,32 @@ download_tracking_data <-
 #' Function needs quite a bit of checking.
 #'
 #' @param job_id string Loopy generated id for preparing or caching data requests.
-#'
+#' @param logging boolean If set to TRUE will write output to logfile
 #' @return numeric HTTP status code.
 #'
 
 check_job_status <-
-  function(job_id) {
+  function(job_id, logging = TRUE) {
     # This function needs a bit more testing
     url <- sprintf("/api/1.0/job/%s/status", job_id)
 
     response <- loopy_api(url, verbose = "1")
+
+    if(logging == TRUE){
+      # Create a log file for checking job status checks
+      if(!file.exists("log/job_status.txt")){
+        file.create("log/job_status.txt")
+      }
+
+      sink("log/job_status.txt", append = TRUE)
+      cat("=============================\n")
+      cat(as.character(Sys.time()), "\n")
+      response
+      cat("\n")
+      cat("=============================\n")
+      cat("\n")
+
+    }
 
     if (response$content$status == "finished") {
       message("Job is finished: Data has been prepared/cached")
