@@ -1,4 +1,3 @@
-
 #' Download Tracking Data
 #'
 #' @description Downloads and returns tracking data as a data frame.
@@ -62,28 +61,28 @@ download_tracking_data <-
 #' @description Checks if a Loopy API request is in progress, finished, or failed.
 #' Function needs quite a bit of checking.
 #'
-#' @param
+#' @param job_id string Loopy generated id for preparing or caching data requests.
 #'
-#' @return
+#' @return numeric HTTP status code.
 #'
-#'
+
 check_job_status <-
   function(job_id) {
-    # This function needs t
+    # This function needs a bit more testing
     url <- sprintf("/api/1.0/job/%s/status", job_id)
 
     response <- loopy_api(url, verbose = "1")
 
     if (response$content$status == "finished") {
       message("Job is finished: Data has been prepared/cached")
-      out <- response$status_code
+      status_code <- response$status_code
     } else if (response$status_code == 202) {
       message("Data is being prepared")
-      out <- response$status_code
+      status_code <- response$status_code
     } else {
       ## I have to do more testing to see what the range of responses are.
       warning("Data preparation may have failed.")
-      out <- response$status_code
+      status_code <- response$status_code
     }
-    return(out)
+    return(status_code)
   }
