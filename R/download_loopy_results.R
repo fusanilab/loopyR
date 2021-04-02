@@ -20,12 +20,15 @@ download_tracking_data <-
       verbose = NULL
     )
 
-    if (response$status_code == 202) {
+    if (response$content$status == "in-progress" | response$content$status == "generate-asset") {
       # Checks the job status of the request. If status turns to 200 it downloads the data.
       try <- 0
       time <- 1
       # Makes a maximum of 5 attempts
       n_tries <- 5
+      # Wait 1 sec so that the first call isn't immediate.
+      Sys.sleep(time)
+      message("Data needs to be prepared:", "\n", "Function will make 5 attempts to download the data.")
       while (try < n_tries) {
         job_status <- check_job_status(response$content$job_id, logging = TRUE)
         if (job_status == 200) {
@@ -51,7 +54,7 @@ download_tracking_data <-
       }
     }
 
-    return(response$content)
+    response$content
   }
 
 
@@ -74,32 +77,31 @@ check_job_status <-
     response <- loopy_api(url, verbose = "1")
 
     if(logging == TRUE){
-      # Create a log file for checking job status checks
-      if(!file.exists("log/job_status.txt")){
-        file.create("log/job_status.txt")
+      # Create a directory for storing job status checks
+      if(!dir.exists("log")){
+        dir.create("log")
+      }
+      if(!file.exists("log\\job_status.txt")){
+        file.create("log\\job_status.txt")
       }
 
-      sink("log/job_status.txt", append = TRUE)
-      cat("=============================\n")
-      cat(as.character(Sys.time()), "\n")
-      response
-      cat("\n")
-      cat("=============================\n")
-      cat("\n")
-      sink()
+      cat("=======================", "\n", file="log\\job_status.txt", append = TRUE)
+      cat(as.character(Sys.time()), "\n", file = "log\\job_status.txt", append = TRUE)
+      capture.output( response, file = "log\\job_status.txt", append=TRUE)
+      cat("=======================", "\n", file = "log\\job_status.txt", append = TRUE)
 
     }
 
     if (response$content$status == "finished") {
       message("Job is finished: Data has been prepared/cached")
       status_code <- response$status_code
-    } else if (response$status_code == 202) {
+    } else if (response$content$status == "in-progress") {
       message("Data is being prepared")
       status_code <- response$status_code
     } else {
       ## I have to do more testing to see what the range of responses are.
-      warning("Data preparation may have failed.")
       status_code <- response$status_code
+      warning("Data preparation may have failed.", "\n", "Status_code is: ", status_code)
     }
     return(status_code)
   }
