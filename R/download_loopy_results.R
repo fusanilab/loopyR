@@ -86,6 +86,7 @@ check_job_status <-
       cat("\n")
       cat("=============================\n")
       cat("\n")
+      sink()
 
     }
 
