@@ -20,7 +20,20 @@ download_tracking_data <-
       verbose = NULL
     )
 
-    if (response$content$status == "in-progress" | response$content$status == "generate-asset") {
+    if("data.frame" %in% class(response$content)){
+      # if the data is already cached it won't return a status header under content
+
+    } else if(!"status" %in% names(response$content)){
+      # A check in case Loopy returns something unexpected.
+      warning("loopy_api() function did not return a data.frame object or job status response.",
+              "\n", "Check that the response is what you expected")
+
+    } else {
+
+      # Message on the status, should probably be deleted later once testing has confirmed possible responses.
+      message("Response status is :", response$content$status, "\n")
+
+     if (response$content$status == "in-progress" | response$content$status == "generate-asset"){
       # Checks the job status of the request. If status turns to 200 it downloads the data.
       try <- 0
       time <- 1
@@ -52,6 +65,7 @@ download_tracking_data <-
           format = "csv"
         )
       }
+     }
     }
 
     response$content
@@ -93,15 +107,16 @@ check_job_status <-
     }
 
     if (response$content$status == "finished") {
+      # Status code might not be the best label for this
       message("Job is finished: Data has been prepared/cached")
-      status_code <- response$status_code
-    } else if (response$content$status == "in-progress") {
+      status_code <- 200
+    } else if (response$content$status == "in-progress" | response$content$status == "started") {
       message("Data is being prepared")
-      status_code <- response$status_code
+      status_code <- 202
     } else {
       ## I have to do more testing to see what the range of responses are.
-      status_code <- response$status_code
-      warning("Data preparation may have failed.", "\n", "Status_code is: ", status_code)
+      status_code <- response$content$status
+      warning("Data preparation may have failed.", "\n", "Status_code is: ", status_code, "\n")
     }
     return(status_code)
   }
