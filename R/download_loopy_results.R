@@ -79,8 +79,8 @@ download_tracking_data <-
 #' Function needs quite a bit of checking.
 #'
 #' @param job_id string Loopy generated id for preparing or caching data requests.
-#' @param logging boolean If set to TRUE will write output to logfile
-#' @return numeric HTTP status code.
+#' @param logging boolean If set to TRUE will write output to logfile.
+#' @return numeric/string HTTP status code or job status progress.
 #'
 
 check_job_status <-

@@ -4,7 +4,15 @@
 \alias{loopy_api}
 \title{Call Loopy API}
 \usage{
-loopy_api(url, verbose = "0", video_id = NULL, collection_id = NULL)
+loopy_api(
+  url,
+  verbose = "0",
+  video_id = NULL,
+  collection_id = NULL,
+  group_key = NULL,
+  asset_id = NULL,
+  format = NULL
+)
 }
 \arguments{
 \item{url}{string Loopy URL file path (origin should be set with set_loopy_user)}
