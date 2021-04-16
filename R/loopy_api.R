@@ -115,6 +115,6 @@ print.loopy_api <- function(x, ...) {
   # Defines print structure for loopy_api objects
   cat("<Loopy ", x$url, ">\n", sep = "")
   cat("Status code: ", x$status_code, "\n")
-  str(x$content)
+  utils::str(x$content)
   invisible(x)
 }

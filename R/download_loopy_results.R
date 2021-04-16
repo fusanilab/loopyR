@@ -101,7 +101,7 @@ check_job_status <-
 
       cat("=======================", "\n", file="log\\job_status.txt", append = TRUE)
       cat(as.character(Sys.time()), "\n", file = "log\\job_status.txt", append = TRUE)
-      capture.output( response, file = "log\\job_status.txt", append=TRUE)
+      utils::capture.output( response, file = "log\\job_status.txt", append=TRUE)
       cat("=======================", "\n", file = "log\\job_status.txt", append = TRUE)
 
     }
