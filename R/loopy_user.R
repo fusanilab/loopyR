@@ -42,7 +42,7 @@ set_loopy_user <- function(api_key,
       # Updates LOOPY_API_KEY if it already exists
       tx <- gsub(
         pattern = "LOOPY_API_KEY=[A-z0-9]*",
-        replace = api_key,
+        replacement = api_key,
         x = tx
       )
     } else {
@@ -54,7 +54,7 @@ set_loopy_user <- function(api_key,
       # Updates LOOPY_ORIGIN if it already exists
       tx <- gsub(
         pattern = "LOOPY_ORIGIN=.*",
-        replace = loopy_origin,
+        replacement = loopy_origin,
         x = tx
       )
     } else {
