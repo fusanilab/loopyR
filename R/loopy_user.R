@@ -15,7 +15,7 @@ set_loopy_user <- function(api_key,
   loopy_origin <- paste0("LOOPY_ORIGIN=", loopy_origin)
 
   # Find where .Reviron is or will be stored
-  renviron <- sprintf("%s\\.Renviron", renviron_path)
+  renviron <- sprintf("%s/.Renviron", renviron_path)
 
   # Check if .Renviron file exists.
   if (!file.exists(renviron)) {
