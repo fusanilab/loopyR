@@ -10,7 +10,7 @@ testthat::expect_message(
 
 )
 
-# The second time the function is called, the user will get
+# If a .Renviron file already exists then the user should get a different message.
 testthat::expect_message(
   set_loopy_user(api_key = '53c0nd3xamp134P1k3y',
                  loopy_origin = 'http://second-example-vpn:0000',
