@@ -7,14 +7,24 @@ library(loopyR)
 
 # TEST 1
 
-# Test that user gets a message that a .Renviron file is created
-# This is the expected message if a .Renviron file does not exist already.
+# Test that an .Renviron file is created and user details are added.
+
+api_1 <- '3xamp134P1k3y'
+origin_1 <- 'http://example-vpn:0000'
+
+# Tests the expected message if a .Renviron file does not exist already.
 testthat::expect_message(
-  set_loopy_user(api_key = '3xamp134P1k3y',
-                 loopy_origin = 'http://example-vpn:0000',
+  set_loopy_user(api_key = api_1,
+                 loopy_origin = origin_1,
                  renviron_path = "./tests/"),
   ".Renviron file created at ./tests/"
 )
+
+# Check that the loopy user details are added to .Renviron file.
+renv1 <- unlist(strsplit(readLines('./tests/.Renviron'), '='))
+testthat::expect_match(renv1[2], api_1)
+testthat::expect_match(renv1[4], origin_1)
+
 
 # TEST 2
 
@@ -30,9 +40,9 @@ testthat::expect_message(
 )
 
 # Check that changes are made
-renv <- unlist(strsplit(readLines('./tests/.Renviron'), '='))
-testthat::expect_match(renv[2], api_2)
-testthat::expect_match(renv[4], origin_2)
+renv2 <- unlist(strsplit(readLines('./tests/.Renviron'), '='))
+testthat::expect_match(renv2[2], api_2)
+testthat::expect_match(renv2[4], origin_2)
 
 # Remove the useless .Renviron file.
 file.remove("./tests/.Renviron")
