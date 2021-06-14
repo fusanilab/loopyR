@@ -1,4 +1,11 @@
+context("User side")
 library(loopyR)
+
+# Test goes though two passes.
+#  The first test the condition where the user does not have a .Renviron file already.
+#  In the second test, the .Renviron file already exists and has loopy user info that it overrides.
+
+# TEST 1
 
 # Test that user gets a message that a .Renviron file is created
 # This is the expected message if a .Renviron file does not exist already.
@@ -8,6 +15,8 @@ testthat::expect_message(
                  renviron_path = "./tests/"),
   ".Renviron file created at ./tests/"
 )
+
+# TEST 2
 
 # If a .Renviron file already exists then the user should get a different message.
 api_2 <- '53c0nd3xamp134P1k3y'
