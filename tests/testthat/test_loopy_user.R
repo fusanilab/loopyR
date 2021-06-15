@@ -84,8 +84,10 @@ testthat::test_that(
     # Check that changes are made
     # This might mess up?
     renv3 <- unlist(strsplit(readLines('../.Renviron'), '='))
-    testthat::expect_match(renv3[2], api_3)
-    testthat::expect_match(renv3[4], origin_3)
+    testthat::expect_equal("LOOPY_API_KEY" %in% renv3, TRUE)
+    testthat::expect_equal("LOOPY_ORIGIN" %in% renv3, TRUE)
+    testthat::expect_match(renv3[match("LOOPY_API_KEY", renv3) + 1], api_3)
+    testthat::expect_match(renv3[match("LOOPY_ORIGIN", renv3) + 1], origin_3)
 
     # Remove the useless .Renviron file.
     file.remove("../.Renviron")
