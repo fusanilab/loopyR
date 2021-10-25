@@ -72,3 +72,62 @@ set_loopy_user <-
       "Please restart your R session to use the Loopy API key and URL."
     )
   }
+
+
+check_loopy_user <- function(renviron_path = Sys.getenv("HOME")){
+
+  cred_check <- check_reviron(renviron_path = renviron_path)
+
+  if(sum(cred_check) != 3){
+    cred_msg <- "Set using set_loopy_user function."
+    if(cred_check['renviron'] == FALSE){
+      message(paste(".Renviron not found; create manually or use set_loopy_user."))
+    }
+    if(cred_check['key'] == FALSE){
+      message(paste("Loopy API key not found;", cred_msg))
+    }
+    if(cred_check['origin'] == FALSE){
+      message(paste("Loopy origin not found;", cred_msg))
+    }
+  }else{
+    call <- loopy_api(url = "/api/1.0/results")
+    call_msg <- sprintf("Loopy call returned status of %d;", call$status_code)
+    if(call$status_code == 200){
+      message(paste(call_msg, "Attempt to access Loopy was successful! :)"))
+    }else if(call$status_code >= 300){
+      ### change to be more informative.
+      message(
+        paste(
+          call_msg,
+          "Attempt to access Loopy was unsuccesful. :( \n"
+          )
+        )
+    }
+  }
+}
+
+check_reviron <- function(renviron_path = Sys.getenv("HOME")){
+
+  data_status <- c(renviron = FALSE, key = FALSE, origin = FALSE)
+
+  # Check that .Renviron, API key, and Loopy origin exist
+  renviron <- sprintf("%s/.Renviron", renviron_path)
+  key <- Sys.getenv("LOOPY_API_KEY")
+  origin <- Sys.getenv("LOOPY_ORIGIN")
+
+
+  if (file.exists(renviron)) {
+    data_status['renviron'] <- TRUE
+  }
+  if(nchar(key) != 0){
+    data_status['key'] <- TRUE
+
+  }
+  if(nchar(origin) != 0){
+    data_status['origin'] <- TRUE
+  }
+
+  return(data_status)
+}
+
+
