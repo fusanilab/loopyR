@@ -1,4 +1,3 @@
-context("User side")
 library(loopyR)
 
 # Test goes though three passes.
@@ -10,58 +9,63 @@ library(loopyR)
 
 # Test that an .Renviron file is created and user details are added.
 testthat::test_that(
-  "loopy_user creates .Renviron file and writes loopy data to it", {
-    api_1 <- '3xamp134P1k3y'
-    origin_1 <- 'http://example-vpn:0000'
+  "loopy_user creates .Renviron file and writes loopy data to it",
+  {
+    api_1 <- "3xamp134P1k3y"
+    origin_1 <- "http://example-vpn:0000"
 
     # Tests the expected message if a .Renviron file does not exist already.
     testthat::expect_message(
-      set_loopy_user(api_key = api_1,
-                     loopy_origin = origin_1,
-                     renviron_path = "../"),
+      set_loopy_user(
+        api_key = api_1,
+        loopy_origin = origin_1,
+        renviron_path = "../"
+      ),
       ".Renviron file created at ../"
     )
 
     # Check that the loopy user details are added to .Renviron file.
-    renv1 <- unlist(strsplit(readLines('../.Renviron'), '='))
+    renv1 <- unlist(strsplit(readLines("../.Renviron"), "="))
     testthat::expect_match(renv1[2], api_1)
     testthat::expect_match(renv1[4], origin_1)
-
-    }
-  )
+  }
+)
 
 # TEST 2
 
 # If a .Renviron file already exists then the user should get a different message.
 testthat::test_that(
-  "Modifies a pre-existing .Revniron file that already has loopy user data written to it.",{
-
-    api_2 <- '53c0nd3xamp134P1k3y'
-    origin_2 <- 'http://second-example-vpn:0000'
+  "Modifies a pre-existing .Revniron file that already has loopy user data written to it.",
+  {
+    api_2 <- "53c0nd3xamp134P1k3y"
+    origin_2 <- "http://second-example-vpn:0000"
 
     testthat::expect_message(
-      set_loopy_user(api_key = api_2,
-                     loopy_origin = origin_2,
-                     renviron_path = "../"),
+      set_loopy_user(
+        api_key = api_2,
+        loopy_origin = origin_2,
+        renviron_path = "../"
+      ),
       "API key and Loopy URL origin written to .Renviron.\nPlease restart your R session to use the Loopy API key and URL."
     )
 
     # Check that changes are made
-    renv2 <- unlist(strsplit(readLines('../.Renviron'), '='))
+    renv2 <- unlist(strsplit(readLines("../.Renviron"), "="))
     testthat::expect_match(renv2[2], api_2)
     testthat::expect_match(renv2[4], origin_2)
 
     # Remove the useless .Renviron file.
     file.remove("../.Renviron")
-    }
-  )
+  }
+)
 
 # TEST 3
 
 # Test to add loopy user info into an already existing .Renviron file.
 
 testthat::test_that(
-  "Modifies pre-existing .Renviron file without loopy user info. ", {
+  "Modifies pre-existing .Renviron file without loopy user info. ",
+  {
     file.create("../.Renviron")
 
     cat(
@@ -71,19 +75,21 @@ testthat::test_that(
       append = T
     )
 
-    api_3 <- 't41rd3xamp134P1k3y'
-    origin_3 <- 'http://third-example-vpn:0000'
+    api_3 <- "t41rd3xamp134P1k3y"
+    origin_3 <- "http://third-example-vpn:0000"
 
     testthat::expect_message(
-      set_loopy_user(api_key = api_3,
-                     loopy_origin = origin_3,
-                     renviron_path = "../"),
+      set_loopy_user(
+        api_key = api_3,
+        loopy_origin = origin_3,
+        renviron_path = "../"
+      ),
       "API key and Loopy URL origin written to .Renviron.\nPlease restart your R session to use the Loopy API key and URL."
     )
 
     # Check that changes are made
     # This might mess up?
-    renv3 <- unlist(strsplit(readLines('../.Renviron'), '='))
+    renv3 <- unlist(strsplit(readLines("../.Renviron"), "="))
     testthat::expect_equal("LOOPY_API_KEY" %in% renv3, TRUE)
     testthat::expect_equal("LOOPY_ORIGIN" %in% renv3, TRUE)
     testthat::expect_match(renv3[match("LOOPY_API_KEY", renv3) + 1], api_3)
@@ -92,7 +98,4 @@ testthat::test_that(
     # Remove the useless .Renviron file.
     file.remove("../.Renviron")
   }
-
-  )
-
-
+)

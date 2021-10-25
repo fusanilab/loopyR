@@ -20,52 +20,52 @@ download_tracking_data <-
       verbose = NULL
     )
 
-    if("data.frame" %in% class(response$content)){
+    if ("data.frame" %in% class(response$content)) {
       # if the data is already cached it won't return a status header under content
-
-    } else if(!"status" %in% names(response$content)){
+    } else if (!"status" %in% names(response$content)) {
       # A check in case Loopy returns something unexpected.
-      warning("loopy_api() function did not return a data.frame object or job status response.",
-              "\n", "Check that the response is what you expected")
-
+      warning(
+        "loopy_api() function did not return a data.frame object or job status response.",
+        "\n", "Check that the response is what you expected"
+      )
     } else {
 
       # Message on the status, should probably be deleted later once testing has confirmed possible responses.
       message("Response status is :", response$content$status, "\n")
 
-     if (response$content$status == "in-progress" | response$content$status == "generate-asset"){
-      # Checks the job status of the request. If status turns to 200 it downloads the data.
-      try <- 0
-      time <- 1
-      # Makes a maximum of 5 attempts
-      n_tries <- 5
-      # Wait 1 sec so that the first call isn't immediate.
-      Sys.sleep(time)
-      message("Data needs to be prepared:", "\n", "Function will make 5 attempts to download the data.")
-      while (try < n_tries) {
-        job_status <- check_job_status(response$content$job_id, logging = TRUE)
-        if (job_status == 200) {
-          break
+      if (response$content$status == "in-progress" | response$content$status == "generate-asset") {
+        # Checks the job status of the request. If status turns to 200 it downloads the data.
+        try <- 0
+        time <- 1
+        # Makes a maximum of 5 attempts
+        n_tries <- 5
+        # Wait 1 sec so that the first call isn't immediate.
+        Sys.sleep(time)
+        message("Data needs to be prepared:", "\n", "Function will make 5 attempts to download the data.")
+        while (try < n_tries) {
+          job_status <- check_job_status(response$content$job_id, logging = TRUE)
+          if (job_status == 200) {
+            break
+          } else {
+            Sys.sleep(time = time)
+            # exponential backoff
+            time <- time * 2
+            try <- try + 1
+          }
+        }
+
+        if (try == 5) {
+          warning("Request timed out: Try call again later")
         } else {
-          Sys.sleep(time = time)
-          # exponential backoff
-          time <- time * 2
-          try <- try + 1
+          # Make the call again
+          response <- loopy_api(
+            url = url,
+            asset_id = asset_id,
+            group_key = group_key,
+            format = "csv"
+          )
         }
       }
-
-      if (try == 5) {
-        warning("Request timed out: Try call again later")
-      } else {
-        # Make the call again
-        response <- loopy_api(
-          url = url,
-          asset_id = asset_id,
-          group_key = group_key,
-          format = "csv"
-        )
-      }
-     }
     }
 
     response$content
@@ -90,20 +90,19 @@ check_job_status <-
 
     response <- loopy_api(url, verbose = "1")
 
-    if(logging == TRUE){
+    if (logging == TRUE) {
       # Create a directory for storing job status checks
-      if(!dir.exists("log")){
+      if (!dir.exists("log")) {
         dir.create("log")
       }
-      if(!file.exists("log\\job_status.txt")){
+      if (!file.exists("log\\job_status.txt")) {
         file.create("log\\job_status.txt")
       }
 
-      cat("=======================", "\n", file="log\\job_status.txt", append = TRUE)
-      cat(as.character(Sys.time()), "\n", file = "log\\job_status.txt", append = TRUE)
-      utils::capture.output( response, file = "log\\job_status.txt", append=TRUE)
       cat("=======================", "\n", file = "log\\job_status.txt", append = TRUE)
-
+      cat(as.character(Sys.time()), "\n", file = "log\\job_status.txt", append = TRUE)
+      utils::capture.output(response, file = "log\\job_status.txt", append = TRUE)
+      cat("=======================", "\n", file = "log\\job_status.txt", append = TRUE)
     }
 
     if (response$content$status == "finished") {
