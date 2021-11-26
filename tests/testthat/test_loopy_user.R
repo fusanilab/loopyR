@@ -100,29 +100,31 @@ testthat::test_that(
   }
 )
 
+testthat::test_that(
+  "Connection can be established",
+  {
+    testthat::expect_message(
+      check_loopy_user(),
+      "Loopy call returned status of 200; Attempt to access Loopy was successful! :)"
+    )
+  }
+)
+
 # Test incorrect
 testthat::test_that(
   "check_loopy_user with incorrect API key and Loopy origin",
   {
-    renviron_path <- "../../"
-    api_1 <- "3xamp134P1k3y"
-    origin_1 <- "http://example-vpn:0000"
-    set_loopy_user(
-        api_key = api_1,
-        loopy_origin = origin_1,
-        renviron_path = renviron_path
-      )
+    cat("No .Renviron file exists\n")
+    renviron_path <- "tests/"
+
+    testthat::expect_message(
+      check_loopy_user(renviron_path = renviron_path),
+      ".Renviron not found; create manually or use set_loopy_user."
+    )
 
     # The functions still use the working .Renviron data.
-    # The problem may be that the system needs to be restarted.
-    # Either way, this needs some testing.
-
-    check_loopy_user(renviron_path = renviron_path)
-    #testthat::expect_message(
-    #  check_loopy_user(renviron_path = renviron_path),
-    #  "Loopy call returned status of 404; Attempt to access Loopy was unsuccesful. :("
-    #)
-    file.remove(paste0(renviron_path,".Renviron"))
+    # To test if the loopy api or origin are not set, I would have to restart
+    #  the R session so that it Sys.getenv() would use a local .Renviron.
 
   }
 )

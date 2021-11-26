@@ -90,22 +90,43 @@ check_loopy_user <- function(renviron_path = Sys.getenv("HOME")){
       message(paste("Loopy origin not found;", cred_msg))
     }
   }else{
-    call <- loopy_api(url = "/api/1.0/results")
-    call_msg <- sprintf("Loopy call returned status of %d;", call$status_code)
-    if(call$status_code == 200){
-      message(paste(call_msg, "Attempt to access Loopy was successful! :)"))
-    }else if(call$status_code >= 300){
-      ### change to be more informative.
-      message(
-        paste(
-          call_msg,
-          "Attempt to access Loopy was unsuccesful. :( \n"
+    tryCatch(
+      {
+        call <- loopy_api(url = "/api/1.0/results")
+        call_msg <- sprintf("Loopy call returned status of %d;", call$status_code)
+        if(call$status_code == 200){
+          message(paste(call_msg, "Attempt to access Loopy was successful! :)"))
+        }else if(call$status_code >= 300){
+          ### change to be more informative.
+          message(
+            paste(
+              call_msg,
+              "Attempt to access Loopy was unsuccesful. :( \n"
+            )
           )
-        )
-    }
+        }
+      },
+      error = function(e){
+        if(grepl("url", e)){
+          message("There is a problem with the Loopy origin URL:\n")
+        }else if(grepl("API", e)){
+          message("There is a problem with the Loopy API key:\n")
+        }
+        message(paste(e, "\n"))
+      }
+    )
   }
 }
 
+#' Check .Renviron
+#'
+#' @description Function that checks if an .Renviron file exists and checks if
+#'     Loopy credentials are present.
+#'
+#' @param renviron_path
+#'
+#' @return
+#' @noRd
 check_reviron <- function(renviron_path = Sys.getenv("HOME")){
 
   data_status <- c(renviron = FALSE, key = FALSE, origin = FALSE)
