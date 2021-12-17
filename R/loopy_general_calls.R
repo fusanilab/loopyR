@@ -9,7 +9,7 @@
 
 list_videos <-
   function(video_type = c("uploaded", "results"),
-           verbose = "1") {
+           verbose = TRUE) {
 
     # Check that user enter video_type matches with possible values.
     video_type <- tolower(video_type)
@@ -39,7 +39,7 @@ list_videos <-
 #' @return list List of Loopy metadata for user-specified videos.
 
 get_video_info <-
-  function(video_id, verbose = "1") {
+  function(video_id, verbose = TRUE) {
     url <- sprintf(
       "/api/1.0/video/%s/info", video_id
     )
@@ -60,7 +60,7 @@ get_video_info <-
 #' @return list A list of metadata for the results of Loopy's image processing operations.
 
 list_results <-
-  function(video_id = NULL, collection_id = NULL, verbose = "1") {
+  function(video_id = NULL, collection_id = NULL, verbose = TRUE) {
     url <- "/api/1.0/results"
 
     response <- loopy_api(

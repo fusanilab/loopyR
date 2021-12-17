@@ -10,16 +10,17 @@
 
 
 loopy_api <- function(url,
-                      verbose = "1",
+                      verbose = TRUE,
                       video_id = NULL,
                       collection_id = NULL,
                       group_key = NULL,
                       asset_id = NULL,
                       format = NULL) {
   if (!is.null(verbose)) {
+    verbose <- as.character(as.integer(verbose))
     if (!as.character(verbose) %in% c("0", "1")) {
       warning(
-        "verbose= must be either '0','1', or NULL; \n Defaulting to '0' (only user's files)"
+        "verbose= must be either TRUE, FALSE, or NULL; \n Defaulting to 0 (only user's files)"
       )
       verbose <- "0"
     }
