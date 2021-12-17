@@ -2,7 +2,7 @@
 #'
 #' @description Wrapper for httr::GET that handles Loopy API requests.
 #' @param url string Loopy URL file path (origin should be set with set_loopy_user)
-#' @param verbose string A URL parameter which permits user access to all the files they have permission to access ('1') or to their files ('0'); default is '0'.
+#' @param verbose boolean A URL parameter which permits user access to all the files they have permission to access (TRUE) or to their files (FALSE); default is TRUE.
 #' @param video_id string A URL parameter which limits return to only those with the video id.
 #' @param collection_id string A URL parameter which limits the return to only those from the specified collection.
 #'

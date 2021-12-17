@@ -3,7 +3,7 @@
 #' @description Lists videos hosted on Loopy, list can either be of videos uploaded to Loopy or those that were produced via a Loopy video processing operation.
 #'
 #' @param video_type string Videos that were either uploaded to Loopy ("uploaded") or produced by Loopy's video processing ("results").
-#' @param verbose string A URL parameter which permits user access to all the files they have permission to access ('1') or to their files ('0'); default is '0'.
+#' @param verbose boolean A URL parameter which permits user access to all the files they have permission to access (TRUE) or to their files (FALSE); default is TRUE.
 #'
 #' @return list of Loopy videos with metadata.
 
@@ -34,7 +34,7 @@ list_videos <-
 #' @description Gets metadata for a user-specified video.
 #'
 #' @param video_id string A URL parameter which limits return to only those with the video id.
-#' @param verbose string A URL parameter which permits user access to all the files they have permission to access ('1') or to their files ('0'); default is '0'.
+#' @param verbose boolean A URL parameter which permits user access to all the files they have permission to access (TRUE) or to their files (FALSE); default is TRUE.
 #'
 #' @return list List of Loopy metadata for user-specified videos.
 
@@ -53,7 +53,7 @@ get_video_info <-
 #'
 #' @description Produces a list of results from Loopy's image processing operations.
 #'
-#' @param verbose string A URL parameter which permits user access to all the files they have permission to access ('1') or to their files ('0'); default is '0'.
+#' @param verbose boolean A URL parameter which permits user access to all the files they have permission to access (TRUE) or to their files (FALSE); default is TRUE.
 #' @param video_id string A URL parameter which limits return to only those with the video id.
 #' @param collection_id string A URL parameter which limits the return to only those from the specified collection.
 #'
