@@ -10,7 +10,7 @@
 
 
 loopy_api <- function(url,
-                      verbose = "0",
+                      verbose = "1",
                       video_id = NULL,
                       collection_id = NULL,
                       group_key = NULL,
