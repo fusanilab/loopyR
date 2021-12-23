@@ -6,7 +6,7 @@
 #' @param group_key string The group_key that Loopy creates for each result.
 #'
 #' @return data.frame Tracking data.
-
+#' @export
 download_tracking_data <-
   function(asset_id, group_key) {
     # This function uses the main loopy_api function, but the call might be different enough to warrant a whole new function.

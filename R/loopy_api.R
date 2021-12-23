@@ -7,8 +7,7 @@
 #' @param collection_id string A URL parameter which limits the return to only those from the specified collection.
 #'
 #' @return list A list including parse JSON (or HTML) data, the URL used in the API request, and the status code of the request.
-
-
+#' @export
 loopy_api <- function(url,
                       verbose = "1",
                       video_id = NULL,

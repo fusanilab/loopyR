@@ -6,7 +6,7 @@
 #' @param verbose string A URL parameter which permits user access to all the files they have permission to access ('1') or to their files ('0'); default is '0'.
 #'
 #' @return list of Loopy videos with metadata.
-
+#' @export
 list_videos <-
   function(video_type = c("uploaded", "results"),
            verbose = "1") {
@@ -37,7 +37,7 @@ list_videos <-
 #' @param verbose string A URL parameter which permits user access to all the files they have permission to access ('1') or to their files ('0'); default is '0'.
 #'
 #' @return list List of Loopy metadata for user-specified videos.
-
+#' @export
 get_video_info <-
   function(video_id, verbose = "1") {
     url <- sprintf(
@@ -58,7 +58,7 @@ get_video_info <-
 #' @param collection_id string A URL parameter which limits the return to only those from the specified collection.
 #'
 #' @return list A list of metadata for the results of Loopy's image processing operations.
-
+#' @export
 list_results <-
   function(video_id = NULL, collection_id = NULL, verbose = "1") {
     url <- "/api/1.0/results"

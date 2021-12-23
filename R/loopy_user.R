@@ -5,7 +5,7 @@
 #' @param loopy_origin string Loopy URL origin (protocol, subdomain, domain name and port, where applicable); Paths, querys, and parameters are specified in other functions.
 #' @param renviron_path string Path where .Renviron is stored. Default is the user's home directory.
 #' @return Creates (if necessary) and appends user's Loopy API key and URL to user's .Renviron file.
-
+#' @export
 set_loopy_user <-
   function(api_key,
            loopy_origin,
