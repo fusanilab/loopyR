@@ -64,19 +64,35 @@ get_video_info <-
 #' @param verbose boolean A URL parameter which permits user access to all the files they have permission to access (TRUE) or to their files (FALSE); default is TRUE.
 #' @param video_id string A URL parameter which limits return to only those with the video id.
 #' @param collection_id string A URL parameter which limits the return to only those from the specified collection.
+#' @param cache Boolean TRUE/FALSE whether return object should be cached for easier access
+#' @param override_cache Boolean TRUE/FALSE if existing cache should be overridden by current call
 #'
 #' @return list A list of metadata for the results of Loopy's image processing operations.
 
 list_results <-
-  function(video_id = NULL, collection_id = NULL, verbose = TRUE) {
-    url <- "/api/1.0/results"
+  function(
+    video_id = NULL,
+    collection_id = NULL,
+    verbose = TRUE,
+    cache = TRUE,
+    override_cache = FALSE) {
 
-    response <- loopy_api(
-      url = url,
-      verbose = verbose,
-      video_id = video_id,
-      collection_id = collection_id
-    )
-
-    return(response$content)
+    cache_exists <- .check_cache(type = "results")
+    if(cache_exists & override_cache == FALSE){
+      out <- .get_cache(type = "results")
+    }else{
+      url <- "/api/1.0/results"
+      response <-
+        loopy_api(
+          url = url,
+          verbose = verbose,
+          video_id = video_id,
+          collection_id = collection_id
+        )
+      out <- response$content
+      if(cache == TRUE){
+        .cache_content(out, type = "results", override_cache = override_cache)
+        }
+      }
+    return(out)
   }
