@@ -3,30 +3,38 @@
 #' @description Lists videos hosted on Loopy, list can either be of videos uploaded to Loopy or those that were produced via a Loopy video processing operation.
 #'
 #' @param video_type string Videos that were either uploaded to Loopy ("uploaded") or produced by Loopy's video processing ("results").
-#' @param verbose boolean A URL parameter which permits user access to all the files they have permission to access (TRUE) or to their files (FALSE); default is TRUE.
+#' @param verbose Boolean A URL parameter which permits user access to all the files they have permission to access (TRUE) or to their files (FALSE); default is TRUE.
+#' @param cache Boolean TRUE/FALSE whether return object should be cached for easier access
+#' @param override_cache Boolean TRUE/FALSE if existing cache should be overridden by current call
 #'
 #' @return list of Loopy videos with metadata.
 
 list_videos <-
   function(video_type = c("uploaded", "results"),
-           verbose = TRUE) {
+           verbose = TRUE,
+           cache = TRUE,
+           override_cache = FALSE) {
 
     # Check that user enter video_type matches with possible values.
     video_type <- tolower(video_type)
     video_type <- match.arg(video_type)
 
-    url <- sprintf(
-      "/api/1.0/videos/%s",
-      video_type
-    )
+    # Check if cache already exists
+    type <- paste0(video_type, "_video")
+    cache_exists <- .check_cache(type)
 
-    response <-
-      loopy_api(
-        url = url,
-        verbose = verbose
-      )
+    if(cache_exists & override_cache == FALSE){
+      out <- .get_cache(type)
+    }else{
+      url <- sprintf("/api/1.0/videos/%s", video_type)
+      response <- loopy_api(url = url,verbose = verbose)
+      out <- response$content
+      if(cache == TRUE){
+        .cache_content(out, type = type, override_cache = override_cache)
+      }
+    }
 
-    return(response$content)
+    return(out)
   }
 
 #' Get Video Info
