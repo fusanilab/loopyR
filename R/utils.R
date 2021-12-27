@@ -38,7 +38,7 @@
       if (type == "uploaded_video") {
         .loopy_temp_cache$uploaded_video <<- content
       } else if (type == "results_video") {
-        .loopy_temp_cache$uploaded_video <<- content
+        .loopy_temp_cache$results_video <<- content
       } else {
         .loopy_temp_cache$results <<- content
       }
